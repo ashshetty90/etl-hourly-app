@@ -1,4 +1,4 @@
-# etl-batch-processor
+# hourly-etl-app
 
 This project does ETL on hourly batches received about flats in Berlin available for rent 
 for rent at immobilienscout24.de.
@@ -15,22 +15,22 @@ File arrives on S3 every hour
 
 The Architecture involves the following tech stack.
 
-- AWS SQS
+- Docker/Kubernetes
 - AWS S3
 - AWS Lambda
 - Python 3.6.6
 
 Justification on Tech Choices:
 
-I decided to go on with the microservices architecture based on the scope of the project as it gives us better `maintanability`, `pause-resume mechanism`, `quick scale-out` and `deployability`.
+I decided to go on with this architecture based on the scope of the project as it gives us better `maintanability` and `deployability`.
 
- 1. AWS SQS -> Though for an hourly job where we can create a schedule in a scheduler , for eg. Airflow , SQS gives us the liberty of easily moving from hourly batch processing to near-realtime processing (not of much difference already).The service can easily scale-out and scale-in with sqs. Above all, there may be chances of not receiving a file for a particular hour and receiving it later will not hamper this architecture and there wont be any failures as well because of missing files.
+ 1. Docker -> is the go to choice while desigining any application 
  2. AWS S3 -> Assuming that the input data arrives in s3, the transformed data will be also stored in S3. Storing the data (raw/clean) in s3 gives us the power of having a centralized data repository (datalake).
  3. AWS Lambda -> Lambda is a wonderful serverless service that runs in response to events and automatically manages the computing resources. I have used lambda here to load (COPY) the data from s3 into redshift on arrival of transformed hourly batches.
  
 # Data Pipeline Flow
 
-![ARCHITECTURE DIAGRAM](https://github.com/Prasannads/etl-batch-processor/blob/master/blob/master/images/Architecture.jpg)
+![ARCHITECTURE DIAGRAM]()
 
 
 # Additional/More Tech choices.
