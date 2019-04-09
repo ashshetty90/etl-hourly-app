@@ -30,14 +30,15 @@ I decided to go on with this architecture based on the scope of the project as i
  
 # Data Pipeline Flow
 
-![ARCHITECTURE DIAGRAM]()
+![ARCHITECTURE DIAGRAM](https://github.com/ashshetty90/etl-hourly-app/blob/master/blob/master/images/architecture.jpg)
 
 
-# Additional/More Tech choices.
-1.  We can add Dynamodb in the process of loading redshift to save the name of files that we load and status of the load. 
-In this way , we can avoid duplicate file loads into Redshift.
+# What can be done better
+1. We can schedule the entire workflow on Airflow.
 
-2. We can write a pyspark application and schedule , run via EMR which creates transformed data in S3 and the Lambda function picks it up for loading. Spark applications can handle huge volumes of data with the help of its distributed computing framework.
+2. Airflow Sensors can be used to trigger the job everytime that data is available on S3
+
+3. SQS/Kafka could also have been used as an alternative
 
 
 
@@ -45,14 +46,14 @@ In this way , we can avoid duplicate file loads into Redshift.
 
 ```sh
 ### Python Application to do Extract and Transform hourly batches
-### Clone the repository [https://github.com/Prasannads/etl-batch-processor.git]
+### Clone the repository [https://github.com/ashshetty90/etl-hourly-app.git]
 
 ### First things First . Create a virtual environment and run the tests to make sure we are all set
 
-$ virtualenv etl-batch-processor -p /usr/local/bin/python3.6
+$ virtualenv etl-hourly-app -p /usr/local/bin/python3.6
     
 ### and then activate the virtual environment
-$ source etl-batch-processor/bin/activate
+$ source etl-hourly-app/bin/activate
 
 ### install dependecies from Pipfile
 $ pipenv install
@@ -62,18 +63,17 @@ $ APP_ENV=test pipenv run pytest
 
 ### Fill out the following details in /etl-batch-processor/batchprocessor/config/ for respective environments
 ### Output S3 Bucket
-### SQS Queue Name to poll
 ### AWS Secret key and Access Key - Ideally, we should not be storing the credentials in the applications as it not secure and should be using IAM roles 
 
 ### Having completed the preliminary steps , create a docker image by running the following command.
-$ docker build -t etl-batch-processor .
+$ docker build -t etl-hourly-app .
 
 ### Run the docker image.
-$ docker run -d --name etl-batch-processor etl-batch-processor python app.py --env=production
+$ docker run -d --name etl-hourly-app etl-hourly-app python app.py --env=production
 
 ### Lambda function for Loading Redshift ( This has not been tested due to time constraints)
 ### clone the repository for lambda function which is developed on Serverless Framework.
-https://github.com/Prasannads/redshift-loader.git
+https://github.com/ashshetty90/redshift-loader.git
 
 ### Fill out the respective details in the file Serverless.yml
 
@@ -90,14 +90,12 @@ $ sls deploy -v --stage ${env}
 
 ### Initial Steps
 
-![INITIAL STEPS](https://github.com/Prasannads/etl-batch-processor/blob/master/blob/master/images/InitialSteps.png)
+![INITIAL STEPS](https://github.com/ashshetty90/etl-hourly-app/blob/master/blob/master/images/initial-setup.png)
 
-### Sample Running Application
 
-![SAMPLE RUNNING APPLICATION](https://github.com/Prasannads/etl-batch-processor/blob/master/blob/master/images/RunningApplication.png)
 
 # Data Model
 
 Though it leads to Query Complexities, Snowflake Schema would be a better approach in this case , as with snowflake schema (normalized) we can save lot of space in the data warehouse (Redshift) and when dimension tables require a significant amount of storage space. 
 
-![SAMPLE RUNNING APPLICATION](https://github.com/ashshetty90/etl-hourly-app/blob/master/blob/master/images/redshift-table-relation.png)
+![TABLE RELATION](https://github.com/ashshetty90/etl-hourly-app/blob/master/blob/master/images/redshift-table-relation.png)
