@@ -100,4 +100,4 @@ $ sls deploy -v --stage ${env}
 
 Though it leads to Query Complexities, Snowflake Schema would be a better approach in this case , as with snowflake schema (normalized) we can save lot of space in the data warehouse (Redshift) and when dimension tables require a significant amount of storage space. 
 
-![SAMPLE RUNNING APPLICATION](https://github.com/Prasannads/etl-batch-processor/blob/master/blob/master/images/DataModel.png)
+![SAMPLE RUNNING APPLICATION](https://github.com/ashshetty90/etl-hourly-app/blob/master/blob/master/images/redshift-table-relation.png)
