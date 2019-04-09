@@ -1,4 +1,4 @@
-# hourly-etl-app
+# etl-hourly-app
 
 This project does ETL on hourly batches received about flats in Berlin available for rent 
 for rent at immobilienscout24.de.
