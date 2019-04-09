@@ -1,0 +1,58 @@
+{
+  "agent": "elastic",
+  "setup": {
+    "nodejs": {
+      "version": "v8.9.0"
+    }
+  },
+  "steps": [
+    {
+      "name": "stop_unless_branch",
+      "branch": "master"
+    },
+    [
+      {
+        "name": "ecr_create_repo",
+        "repositoryName": "hourly-etl-app"
+      },
+      {
+        "name": "docker_build_push",
+        "image": "hourly-etl-app",
+        "tag": "${COMMIT_HASH}-${BUILD_NUMBER}",
+        "dockerfile": "Dockerfile"
+      }
+    ],
+    [
+      {
+        "name": "deploy",
+        "type": "kubernetes",
+        "app": "hourly-etl-app",
+        "environment": "staging",
+        "namespace": "data",
+        "nodeSelector": "batch",
+        "iamRole": "HourlyEtlAppRole",
+        "dockerCommand": "exec python app.py --env=staging",
+        "imageVersion": "hourly-etl-app:${COMMIT_HASH}-${BUILD_NUMBER}",
+        "replicas": 1,
+        "cpuRequest": "200m",
+        "cpuLimit": "300m",
+        "memoryRequest": "700Mi",
+        "memoryLimit": "1024Mi",
+        "cron": {
+          "schedule": "30 01 * * *",
+          "concurrencyPolicy": "Replace"
+        },
+        "env": [
+          {
+            "name": "APP_ENV",
+            "value": "staging"
+          },
+          {
+            "name": "REGION",
+            "value": "ap-southeast-1"
+          }
+        ]
+      }
+    ]
+  ]
+}
