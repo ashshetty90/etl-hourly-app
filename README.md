@@ -38,7 +38,9 @@ I decided to go on with this architecture based on the scope of the project as i
 
 2. Airflow Sensors can be used to trigger the job everytime that data is available on S3
 
-3. SQS/Kafka could also have been used as an alternative
+3. Use Spark for processing and store the results on S3 and build Hive/Athena tables thus de-coupling the storage from the compute.
+
+4. SQS/Kafka could also have been used as an alternative
 
 
 
@@ -96,6 +98,6 @@ $ sls deploy -v --stage ${env}
 
 # Data Model
 
-Though it leads to Query Complexities, Snowflake Schema would be a better approach in this case , as with snowflake schema (normalized) we can save lot of space in the data warehouse (Redshift) and when dimension tables require a significant amount of storage space. 
+Snowflake Schema would be a better approach in this case , as with snowflake schema (normalized) we can save lot of space in the data warehouse (Redshift) and when dimension tables require a significant amount of storage space. 
 
 ![TABLE RELATION](https://github.com/ashshetty90/etl-hourly-app/blob/master/blob/master/images/redshift-table-relation.png)
