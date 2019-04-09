@@ -61,7 +61,7 @@ $ pipenv install
 ### run the tests
 $ APP_ENV=test pipenv run pytest
 
-### Fill out the following details in /etl-batch-processor/batchprocessor/config/ for respective environments
+### Fill out the following details in /etl-hourly-app/batchprocessor/config/ for respective environments
 ### Output S3 Bucket
 ### AWS Secret key and Access Key - Ideally, we should not be storing the credentials in the applications as it not secure and should be using IAM roles 
 
