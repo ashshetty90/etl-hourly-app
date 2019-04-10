@@ -42,6 +42,8 @@ I decided to go on with this architecture based on the scope of the project as i
 
 4. SQS/Kafka could also have been used as an alternative
 
+5. Slack/Pager-Duty/Datadog can be added for alert and monitoring.
+
 
 
 # How to run this application
@@ -75,7 +77,7 @@ $ docker run -d --name etl-hourly-app etl-hourly-app python app.py --env=product
 
 ### Lambda function for Loading Redshift ( This has not been tested due to time constraints)
 ### clone the repository for lambda function which is developed on Serverless Framework.
-https://github.com/ashshetty90/redshift-loader.git
+https://github.com/ashshetty90/lambda-redshift-loader.git
 
 ### Fill out the respective details in the file Serverless.yml
 
